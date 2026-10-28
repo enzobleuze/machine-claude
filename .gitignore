@@ -1,0 +1,5 @@
+.derniere-synchro.lock
+__pycache__/
+*.pyc
+outputs/
+.DS_Store

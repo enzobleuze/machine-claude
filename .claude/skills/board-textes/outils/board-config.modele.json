@@ -1,0 +1,7 @@
+{
+  "_lisez_moi": "Modèle. Claude le copie en board-config.json à la racine du vault et met les vrais noms de sièges choisis pendant l'interview (skill board-textes). La porte porte_board.py exige que chaque siège de « requis » figure dans la ligne « Sièges joués » de board.md, et chaque siège de « joues_ou_sans_objet » dans « Sièges joués » ou « Sièges sans objet ».",
+  "requis": ["Expert fond", "Méthode", "Bibliothécaire", "Client idéal", "Voix", "Vérité"],
+  "joues_ou_sans_objet": ["Expert second"],
+  "cles_non_publiques": ["style", "image", "date", "id", "statut"],
+  "frontmatter_public": ["subject", "title", "preview"]
+}

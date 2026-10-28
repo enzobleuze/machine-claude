@@ -1,0 +1,17 @@
+{
+  "_lisez_moi": "Modèle. Claude le copie en regles-voix.json à la racine du vault et le remplit avec les réponses de l'interview (skill controle-voix). Chaque règle doit se mesurer : un mot, un motif, un compte. Les goûts flous (« sonne trop IA ») restent dans le guide de voix, pas ici.",
+  "tirets_longs": true,
+  "remplacement_tiret": ", ",
+  "ignorer_citations": true,
+  "mots_interdits": [
+    {"mot": "EXEMPLE_MOT_BANNI", "remplacer_par": "EXEMPLE_MOT_PROPRE", "niveau": "dur"},
+    {"mot": "EXEMPLE_MOT_A_SIGNALER", "niveau": "alerte"}
+  ],
+  "motifs_interdits": [
+    {"motif": "\\bn'(?:est|es|êtes|sont)\\s+pas\\b[^.!?\\n]{1,80}?,\\s*(?:c'est|tu es|il est|elle est)\\b",
+     "message": "antithèse « ce n'est pas X, c'est Y » (tournure repérée comme écrite par une IA)", "niveau": "dur"},
+    {"motif": "\\b\\d+\\s?%",
+     "message": "pourcentage : vérifier la source avec le contrôle de vérité", "niveau": "alerte"}
+  ],
+  "anaphore": {"actif": true, "min": 3, "mots_exclus": ["le", "la", "les", "un", "une", "des", "de", "du", "et", "à", "en"]}
+}

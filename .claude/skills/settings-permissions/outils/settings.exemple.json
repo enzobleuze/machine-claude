@@ -1,0 +1,39 @@
+{
+  "$commentaire": "Exemple de .claude/settings.json pour un vault. Claude le FUSIONNE avec l'existant (jamais d'écrasement), retire cette ligne, et adapte les listes après l'interview.",
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Edit(wiki/**)",
+      "Write(wiki/**)",
+      "Edit(outputs/**)",
+      "Write(outputs/**)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(python scripts/cerveau.py:*)",
+      "Bash(python scripts/planche.py:*)",
+      "Bash(node .claude/hooks/:*)"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Edit(.claude/settings.json)",
+      "Edit(CLAUDE.md)"
+    ],
+    "deny": [
+      "Read(~/.claude/secrets/**)",
+      "Read(./**/.env)",
+      "Edit(raw/**)",
+      "Write(raw/**)",
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git reset --hard:*)"
+    ]
+  },
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet"
+  }
+}

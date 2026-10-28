@@ -1,0 +1,11 @@
+{
+  "_lisez_moi": "Copie ce fichier en scripts/taches-attendues.json. Une entrée par tâche planifiée. Le nom est celui passé à run-tache.sh. toutes_les_heures = fréquence + une marge (26 pour une tâche quotidienne, 170 pour une hebdomadaire). sorties = fichiers que la tâche doit laisser ({date} = date de la dernière exécution, jokers * permis).",
+  "taches": [
+    {"nom": "sauvegarde", "toutes_les_heures": 26, "sorties": ["outputs/sauvegarde/derniere-ok.txt"]},
+    {"nom": "jardinier", "toutes_les_heures": 26, "sorties": ["outputs/jardinier/{date}/*.md"]},
+    {"nom": "rapport-du-matin", "toutes_les_heures": 26, "sorties": ["outputs/brief-matin/{date}.md"]},
+    {"nom": "scoreboard", "toutes_les_heures": 170},
+    {"nom": "plan-semaine", "toutes_les_heures": 170, "sorties": ["outputs/plan-semaine/*.md"]},
+    {"nom": "nuit", "toutes_les_heures": 26, "active": false}
+  ]
+}

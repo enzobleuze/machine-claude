@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mon app</title>
+<style>
+  :root { --fond: #f7f5f0; --texte: #1d1d1b; --doux: #6b6b66; --carte: #ffffff; --ligne: #e3e0d8; --alerte: #b3412f; }
+  @media (prefers-color-scheme: dark) {
+    :root { --fond: #151513; --texte: #ecebe6; --doux: #9a9a93; --carte: #1f1f1c; --ligne: #33332e; --alerte: #e07a63; }
+  }
+  body { margin: 0; background: var(--fond); color: var(--texte); font: 16px/1.5 system-ui, sans-serif; }
+  main { max-width: 960px; margin: 0 auto; padding: 16px; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  header { max-width: 960px; margin: 0 auto; padding: 16px 16px 0; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  section { background: var(--carte); border: 1px solid var(--ligne); border-radius: 10px; padding: 12px 14px; }
+  h1 { font-size: 20px; margin: 0; } h2 { font-size: 15px; margin: 0 0 6px; color: var(--doux); }
+  .erreur { color: var(--alerte); } small { color: var(--doux); }
+  button { font: inherit; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--ligne); background: var(--carte); color: var(--texte); cursor: pointer; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Mon app</h1>
+  <div><small id="quand"></small> <button id="rafraichir" title="Touche R">Rafraîchir</button></div>
+</header>
+<main id="grille"><section><h2>Chargement</h2></section></main>
+<script>
+// Affichage seulement : toute la logique vit dans construire-etat.py. textContent partout (jamais innerHTML sur des données).
+const grille = document.getElementById('grille');
+
+function carte(titre, lignes, classe) {
+  const s = document.createElement('section');
+  const h = document.createElement('h2'); h.textContent = titre; s.appendChild(h);
+  for (const l of lignes) { const p = document.createElement('div'); p.textContent = l; if (classe) p.className = classe; s.appendChild(p); }
+  return s;
+}
+
+function rendre(etat) {
+  grille.replaceChildren();
+  const sections = etat.sections || {};
+  if (sections.log) grille.appendChild(carte('Dernières sessions', sections.log.entrees.length ? sections.log.entrees : ['rien encore']));
+  if (sections.parking) grille.appendChild(carte('Idées au parking', [String(sections.parking.a_trier) + ' idée(s)']));
+  for (const [nom, err] of Object.entries(etat.erreurs || {})) grille.appendChild(carte('Section ' + nom, [err], 'erreur'));
+  document.getElementById('quand').textContent = etat.construit_le ? 'état du ' + etat.construit_le.replace('T', ' à ') : '';
+}
+
+async function charger() {
+  try { rendre(await (await fetch('/api/state')).json()); }
+  catch (e) { grille.replaceChildren(carte('Erreur', ['Le serveur ne répond pas : relance serveur.py'], 'erreur')); }
+}
+
+async function rafraichir() {
+  const b = document.getElementById('rafraichir'); b.disabled = true; b.textContent = 'En cours';
+  try { await fetch('/api/rebuild', { method: 'POST' }); } finally { b.disabled = false; b.textContent = 'Rafraîchir'; charger(); }
+}
+
+document.getElementById('rafraichir').addEventListener('click', rafraichir);
+document.addEventListener('keydown', (e) => { if (e.key === 'r' && !e.target.closest('input,textarea')) rafraichir(); });
+charger();
+setInterval(charger, 60000);
+</script>
+</body>
+</html>

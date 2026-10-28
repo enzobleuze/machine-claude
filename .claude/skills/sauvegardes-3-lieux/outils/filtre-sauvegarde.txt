@@ -1,0 +1,21 @@
+# Filtre rclone du miroir lisible du vault (sauvegarde-drive.py --exclude-from).
+# Les secrets ne partent JAMAIS en clair : ils vont dans le coffre chiffré.
+.git/**
+**/secrets/**
+*.env
+*.key
+*.pem
+**/credentials*.json
+**/service-account*.json
+**/node_modules/**
+**/__pycache__/**
+**/.venv/**
+.obsidian/workspace*.json
+.obsidian/cache/**
+.trash/**
+outputs/cerveau-cache.npz
+*.tmp
+*.lock
+desktop.ini
+Thumbs.db
+.DS_Store

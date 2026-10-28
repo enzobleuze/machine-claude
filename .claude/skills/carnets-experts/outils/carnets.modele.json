@@ -1,0 +1,23 @@
+{
+  "_lisez_moi": "Registre des carnets NotebookLM. Claude le copie en carnets.json à la racine du vault et le remplit pendant l'interview (skill carnets-experts). Clé = nom court du carnet, utilisé par scripts/nlm_ask.py et par les sièges du comité et du board. auteur = le nom que la réponse ne doit jamais nier (garde-fou). role = fond (fait foi sur le fond), methode (ta propre méthode, interne), performance (vente, contenu, réseaux), voix-client (paroles de tes clients, pseudonymisées).",
+  "expert-fond": {
+    "id": "COLLER_ICI_L_IDENTIFIANT",
+    "titre": "Nom du carnet dans NotebookLM",
+    "auteur": "Nom de l'auteur ou de l'école",
+    "domaine": "ce sur quoi il fait foi, en une ligne",
+    "role": "fond",
+    "langue": "en",
+    "sources": 0,
+    "public": "citable | interne"
+  },
+  "ma-methode": {
+    "id": "COLLER_ICI_L_IDENTIFIANT",
+    "titre": "Ma méthode (transcriptions de mon programme)",
+    "auteur": "",
+    "domaine": "ce que J'enseigne, avec mes étapes et mes mots",
+    "role": "methode",
+    "langue": "fr",
+    "sources": 0,
+    "public": "interne"
+  }
+}

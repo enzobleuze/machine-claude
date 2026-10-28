@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cockpit</title>
+<style>
+  :root { --fond:#f6f4ef; --carte:#ffffff; --encre:#1d1d1b; --doux:#6b6860; --trait:#e3dfd6; --accent:#2f5d50; --alerte:#9a3b1f; --ok:#2f6b3a; }
+  @media (prefers-color-scheme: dark) { :root { --fond:#151513; --carte:#1f1f1c; --encre:#f1eee7; --doux:#a7a397; --trait:#34322c; --accent:#8cc4b2; --alerte:#f0a184; --ok:#9ad0a5; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--fond); color:var(--encre); font:16px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width:1100px; margin:0 auto; padding:20px 16px 40px; }
+  header { display:flex; gap:12px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; }
+  h1 { font-size:15px; font-weight:600; color:var(--doux); margin:0 0 6px; letter-spacing:.02em; }
+  #situation { font-size:20px; font-weight:600; margin:0; max-width:820px; }
+  button { font:inherit; padding:8px 14px; border-radius:8px; border:1px solid var(--trait); background:var(--carte); color:var(--encre); cursor:pointer; }
+  button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  .grille { display:grid; gap:14px; margin-top:18px; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); }
+  section { background:var(--carte); border:1px solid var(--trait); border-radius:12px; padding:16px; }
+  section h2 { font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--doux); margin:0 0 10px; }
+  .gros { font-size:28px; font-weight:700; }
+  .doux { color:var(--doux); }
+  ul { list-style:none; margin:0; padding:0; }
+  li { padding:7px 0; border-top:1px solid var(--trait); }
+  li:first-child { border-top:0; }
+  .fait { color:var(--doux); text-decoration:line-through; }
+  .alerte li { color:var(--alerte); }
+  .barre { height:8px; background:var(--trait); border-radius:4px; overflow:hidden; margin-top:6px; }
+  .barre > span { display:block; height:100%; background:var(--accent); }
+  #erreur { color:var(--alerte); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div><h1 id="date">Cockpit</h1><p id="situation">Chargement…</p></div>
+    <button id="rafraichir" type="button">Rafraîchir</button>
+  </header>
+  <p id="erreur" role="alert"></p>
+  <div class="grille">
+    <section><h2>Attend ta réponse</h2><ul id="attente"></ul></section>
+    <section><h2>Prochaine tâche</h2><p id="prochaine" class="gros" style="font-size:20px"></p></section>
+    <section><h2>Argent du mois</h2><p id="argent" class="gros"></p><div class="barre"><span id="argentBarre" style="width:0"></span></div><p id="argentDetail" class="doux"></p></section>
+    <section><h2 id="semaineTitre">Cette semaine</h2><p id="semaineChose" class="doux"></p><ul id="semaine"></ul></section>
+    <section><h2 id="triTitre">Trimestre</h2><ul id="trimestre"></ul></section>
+    <section class="alerte"><h2>Alertes</h2><ul id="alertes"></ul></section>
+  </div>
+</main>
+<script>
+// Tout le texte passe par textContent : une fiche ne peut jamais injecter du code dans la page.
+const $ = id => document.getElementById(id);
+const eur = n => n == null ? "inconnu" : Math.round(n).toLocaleString("fr-FR") + " €";
+function liste(id, items, vide) {
+  const ul = $(id); ul.replaceChildren();
+  if (!items.length) { const li = document.createElement("li"); li.className = "doux"; li.textContent = vide; ul.append(li); return; }
+  for (const [texte, classe] of items) { const li = document.createElement("li"); li.textContent = texte; if (classe) li.className = classe; ul.append(li); }
+}
+function dessiner(s) {
+  $("date").textContent = "Cockpit, " + new Date(s.aujourdhui + "T12:00").toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+  $("situation").textContent = s.situation;
+  liste("attente", s.attente.map(p => [p.nom + " : depuis " + (p.joursAttente === 0 ? "aujourd'hui" : p.joursAttente + " j") + (p.prochainPas ? ". " + p.prochainPas : "")]), "Personne. Bravo.");
+  $("prochaine").textContent = s.prochaine || "Aucune. Dis à Claude ta prochaine tâche.";
+  const a = s.argent;
+  $("argent").textContent = eur(a.encaisse) + (a.cible ? " sur " + eur(a.cible) : "");
+  $("argentBarre").style.width = (a.encaisse != null && a.cible ? Math.min(100, 100 * a.encaisse / a.cible) : 0) + "%";
+  $("argentDetail").textContent = a.ventes == null ? "Aucune vente notée pour l'instant." : a.ventes + " paiement" + (a.ventes > 1 ? "s" : "") + " ce mois.";
+  $("semaineTitre").textContent = s.semaine.titre || "Cette semaine";
+  $("semaineChose").textContent = s.semaine.chose ? "Priorité : " + s.semaine.chose : "";
+  liste("semaine", s.semaine.cases.map(c => [c.texte, c.fait ? "fait" : ""]), "Pas encore de plan de la semaine.");
+  $("triTitre").textContent = s.trimestre.nom ? "Trimestre " + s.trimestre.nom : "Trimestre";
+  liste("trimestre", s.trimestre.objectifs.map(o => [o.titre + " : " + (o.actuel == null ? "inconnu" : o.actuel) + " sur " + (o.cible == null ? "inconnu" : o.cible) + " " + o.unite]), "Aucun objectif posé.");
+  liste("alertes", s.alertes.map(t => [t]), "Rien.");
+}
+async function charger(rebuild) {
+  $("erreur").textContent = "";
+  try {
+    const r = rebuild ? await fetch("/api/rebuild", { method: "POST" }) : await fetch("/state.json");
+    const s = await r.json();
+    if (!r.ok) throw new Error(s.erreur || r.status);
+    dessiner(s);
+  } catch (e) { $("erreur").textContent = "Le Cockpit n'a pas pu lire ton vault : " + e.message; }
+}
+$("rafraichir").addEventListener("click", () => charger(true));
+charger(false);
+</script>
+</body>
+</html>
