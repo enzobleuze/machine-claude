@@ -15,12 +15,15 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(python scripts/cerveau.py:*)",
-      "Bash(python scripts/planche.py:*)",
-      "Bash(node .claude/hooks/:*)"
+      "Bash(python scripts/planche.py:*)"
     ],
     "ask": [
       "Bash(git push:*)",
       "Edit(.claude/settings.json)",
+      "Edit(.claude/hooks/**)",
+      "Write(.claude/hooks/**)",
+      "Edit(scripts/**)",
+      "Write(scripts/**)",
       "Edit(CLAUDE.md)"
     ],
     "deny": [

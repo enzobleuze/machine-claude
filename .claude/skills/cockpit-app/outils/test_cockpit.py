@@ -149,8 +149,13 @@ class TestServeur(unittest.TestCase):
             self.assertIn("Attend ta réponse", html)
             state = json.loads(urllib.request.urlopen(base + "/state.json").read())
             self.assertIn("attente", state)
-            r = urllib.request.urlopen(urllib.request.Request(base + "/api/rebuild", method="POST"))
+            r = urllib.request.urlopen(urllib.request.Request(base + "/api/rebuild", method="POST", headers={"Origin": base}))
             self.assertEqual(r.status, 200)
+            for h in ({}, {"Origin": "http://evil.example"}):  # POST sans origine ou d'un autre site : refusé
+                with self.assertRaises(urllib.error.HTTPError):
+                    urllib.request.urlopen(urllib.request.Request(base + "/api/rebuild", method="POST", headers=h))
+            with self.assertRaises(urllib.error.HTTPError):  # Host étranger (DNS rebinding) : refusé
+                urllib.request.urlopen(urllib.request.Request(base + "/state.json", headers={"Host": "evil.example"}))
             with self.assertRaises(urllib.error.HTTPError):
                 urllib.request.urlopen(base + "/../wiki/clients/alex-test.md")
             srv.shutdown()

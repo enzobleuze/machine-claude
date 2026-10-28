@@ -39,7 +39,18 @@ def make_handler(vault):
             self.end_headers()
             self.wfile.write(data)
 
+        def _local(self):
+            # Anti « DNS rebinding » : seul un Host local est servi ; un POST doit venir de la page elle-même.
+            port = self.server.server_address[1]
+            permis = {f"127.0.0.1:{port}", f"localhost:{port}"}
+            if self.headers.get("Host", "") not in permis:
+                return False
+            origin = self.headers.get("Origin")
+            return self.command != "POST" or (origin is not None and origin.split("//", 1)[-1] in permis)
+
         def do_GET(self):
+            if not self._local():
+                return self._send(403, "interdit", "text/plain; charset=utf-8")
             if self.path in ("/", "/index.html"):
                 self._send(200, (HERE / "index.html").read_bytes(), "text/html; charset=utf-8")
             elif self.path.startswith("/state.json"):
@@ -51,6 +62,8 @@ def make_handler(vault):
                 self._send(404, "introuvable", "text/plain; charset=utf-8")
 
         def do_POST(self):
+            if not self._local():
+                return self._send(403, "interdit", "text/plain; charset=utf-8")
             if self.path != "/api/rebuild":
                 return self._send(404, "introuvable", "text/plain; charset=utf-8")
             try:

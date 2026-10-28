@@ -29,7 +29,7 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 VAULT = Path(__file__).resolve().parent.parent
-SECRET = re.compile(r"(^|/)(secrets/|[^/]*\.env$|[^/]*\.pem$|[^/]*\.key$|credentials[^/]*\.json$|service-account[^/]*\.json$)", re.I)
+SECRET = re.compile(r"(^|/)(secrets/|[^/]*\.env(\.[^/]*)?$|[^/]*\.pem$|[^/]*\.key$|credentials[^/]*\.json$|service-account[^/]*\.json$)", re.I)
 
 
 def git(*args: str, ok: bool = False) -> subprocess.CompletedProcess:
@@ -41,8 +41,9 @@ def git(*args: str, ok: bool = False) -> subprocess.CompletedProcess:
 
 def secrets_suivis() -> list[str]:
     """Fichiers de secrets déjà suivis, ou qui le seraient au prochain « git add -A »."""
-    suivis = git("ls-files").stdout.splitlines()
-    entrants = git("ls-files", "--others", "--exclude-standard").stdout.splitlines()
+    # -z : chemins bruts séparés par NUL (sans -z, git met entre guillemets les chemins accentués et le motif rate)
+    suivis = git("ls-files", "-z").stdout.split("\0")
+    entrants = git("ls-files", "-z", "--others", "--exclude-standard").stdout.split("\0")
     return sorted({f for f in suivis + entrants if SECRET.search(f)})
 
 
