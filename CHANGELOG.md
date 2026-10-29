@@ -2,6 +2,10 @@
 
 Chaque version est datée. Pour mettre à jour une installation : « Mets à jour la machine depuis ce dossier » (voir INSTALLER.md, dernière section).
 
+## 2026-10-29 : version 1.3.1 (correctif de sécurité, s'applique après la version 1.3)
+- `cockpit-app` : dans les messages que le Cockpit prépare pour Claude, le texte venu de tiers est désormais encadré comme une donnée à ne pas exécuter : titres d'invitations d'agenda et de tâches, comptes rendus d'appels, coordonnées, raisons de refus. Une invitation piégée ne peut plus glisser une consigne à Claude. Les notes écrites par l'utilisateur restent telles quelles. Un test vérifie l'encadrement.
+- Pour une installation existante : « Mets à jour le Cockpit depuis ce dossier » (Claude recopie `cockpit_build.py`, `index.html` et `test_cockpit.py`, puis relance les tests).
+
 ## 2026-10-29 : version 1.3 (s'applique après la version 1.2)
 - Nouvelle brique `charte-graphique` (bloc D, avant le Cockpit) : couleurs, polices, logo et ambiance dans `bibliotheque/marque/charte.json`. Reprend une identité existante, ou propose quatre chartes prêtes plus une sur mesure sur une page d'aperçu, ou part d'une charte simple. `charte.py` déduit le reste (surfaces, thème clair et sombre, couleurs d'état), garantit les contrastes et écrit `charte.css` et `charte-jetons.json`, que lisent tous les outils visuels.
 - `cockpit-app` au niveau du système d'origine : écrans Aujourd'hui, Clients (dossier complet pour Claude), Appel (avec répétition), Échelle, Agenda (iCal, Linear), Réseaux, Tournage, Plan ; ventes, ligne de situation, recherche rapide, aide, mode démo, clair et sombre aux couleurs de la charte. Nouveaux : `cockpit_sources.py`, `cockpit_demo.py`, `charte-simple.css`. 31 tests hors ligne.
