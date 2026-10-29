@@ -285,7 +285,7 @@ const T={
     "Si c'est pour toi, fais-la puis coche la case. Si c'est pour moi, prépare tout pour que je la finisse en 20 minutes.",FIN],
   semaine:i=>{const c=S.semaine.cases[i];return [`Règle ça : une case de ma semaine (${PLAN}).`,`Case : ${c.texte}. État : ${c.fait?'cochée':'pas faite'}.`,
     c.enRetard?'Sa date est passée : dis-moi si c\'est fait, à refaire ou à décaler.':'',c.qui==='claude'?'Elle est pour toi : fais-la, puis coche-la dans le plan.':'Prépare-moi tout pour que je la finisse vite.',FIN]},
-  tache:t=>[`Règle ça : une tâche${t.id?` (${t.id})`:''}.`,`Tâche : ${t.titre}.`,t.echeance?`Échéance : ${dLong(t.echeance)} (${dans(t.echeance)}).`:'',t.url?`Lien : ${t.url}`:'',
+  tache:t=>[`Règle ça : une tâche${t.id?` (${t.id})`:''}.`,'Tâche :\n'+tiers(t.titre),t.echeance?`Échéance : ${dLong(t.echeance)} (${dans(t.echeance)}).`:'',t.url?`Lien : ${t.url}`:'',
     'Dis-moi où elle en est et la prochaine action concrète. Avance-la toi-même si tu peux.',FIN],
   alerte:a=>['Règle ça : une alerte du Cockpit.',tiers(a.titre+(a.msg?'\n'+a.msg:'')),'Dis-moi ce qui se passe et règle ce que tu peux régler seul.',FIN],
   point:p=>[`Fais le point sur ${p.nom} : lis sa fiche ${p.fichier} et, s'il existe, le dossier outputs/cockpit/dossiers/${p.id}.md.`,
@@ -299,7 +299,7 @@ const T={
     'Écris le message ou le plan d\'appel. Tout texte pour le client passe au board avant envoi.',FIN],
   note:(p,n)=>[`Une note sur ${p.nom}, prise dans le Cockpit le ${String(n.date).slice(0,10)} :`,n.texte,'Range-la dans sa fiche (Journal) et dis-moi s\'il faut agir.',FIN],
   element:e=>{const c=(S.agenda.commentaires[e.id]||[]).map(x=>x.texte).join(' / ');return [
-    e.type==='evenement'?'Voici un événement de mon agenda.':'Voici un élément de mon agenda.',`${cap(e.type)} : ${e.titre}, le ${dLong(e.debut)}${heure(e.debut)?' à '+heure(e.debut):''}.`,
+    e.type==='evenement'?'Voici un événement de mon agenda.':'Voici un élément de mon agenda.',`${cap(e.type)}, le ${dLong(e.debut)}${heure(e.debut)?' à '+heure(e.debut):''}. Son intitulé :\n`+tiers(e.titre),
     c?'Mon commentaire : '+c:'',e.type==='evenement'?"Si je te demande de le déplacer ou de le supprimer, fais-le avec ton connecteur d'agenda, après mon accord.":'Dis-moi ce qu\'il faut faire et fais ce que tu peux.',FIN]},
   repondreTous:()=>['Prépare une réponse à chacun de ces commentaires, dans ma voix (wiki/maps/voix.md), courte et utile.',
     'Ne publie rien : je relis et je publie moi-même.',tiers(S.reseaux.commentaires.map(c=>`${c.nomReseau}, ${c.auteur||'quelqu\'un'}, sous « ${c.publication||'?'} » : ${c.texte}`).join('\n')),FIN],

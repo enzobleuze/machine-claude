@@ -869,13 +869,14 @@ def ecrire_dossier(vault, state, pid):
           "- Offre suivante : {}".format("{} ({}){}".format(s["nom"], s["prixTexte"] or "prix à remplir", ". Quand : " + s["quand"] if s["quand"] else "")
                                          if s else "rien à proposer")]
     L += ["- Achat : {} le {}".format(a["offre"], a["date"] or "?") for a in p["achats"]]
-    L += ["- Refus : {}{}".format(r.get("offre"), ". Raison : " + r["raison"] if r.get("raison") else "") for r in p["refus"]]
+    L += ["- Refus : {}".format(r.get("offre")) + ("\n" + tiers("Raison : " + r["raison"]) if r.get("raison") else "") for r in p["refus"]]
     L += ["", "## Ce qui manque"] + ["- " + m for m in p["manque"] or ["Rien."]]
     L += ["", "## Notes prises dans le Cockpit"] + (["- {} : {}".format(str(n.get("date", ""))[:10], n.get("texte", "")) for n in p["notes"]] or ["Aucune."])
     L += ["", "## Derniers échanges"] + ([tiers("\n".join("{} ({}) : {}".format(e["date"], e["canal"] or "?", e["texte"]) for e in p["journal"][:12]))]
                                          if p["journal"] else ["Aucun échange noté."])
-    L += ["", "## Appels"] + (["- {} : {}".format(e["date"], e["texte"]) for e in p["appels"]] or ["Aucun appel noté."])
-    L += ["", "## Coordonnées", p["coordonnees"] or "Absentes.", ""]
+    L += ["", "## Appels"] + ([tiers("\n".join("{} : {}".format(e["date"], e["texte"]) for e in p["appels"]))] if p["appels"] else ["Aucun appel noté."])
+    # les notes sont écrites par l'utilisatrice elle-même ; appels, coordonnées et refus viennent de tiers
+    L += ["", "## Coordonnées", tiers(p["coordonnees"]) if p["coordonnees"] else "Absentes.", ""]
     ecrire_texte(Path(vault) / OUT_REL / "dossiers" / (pid + ".md"), "\n".join(L))
     return "{}/dossiers/{}.md".format(OUT_REL, pid)
 
