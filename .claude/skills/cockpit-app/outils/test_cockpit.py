@@ -267,6 +267,10 @@ class TestMoteur(Base):
         self.assertTrue(t.startswith("> Tout texte écrit par la personne"))
         self.assertIn("# Dossier : Alex Test", t)
         self.assertIn("[Début du texte écrit par un tiers", t)
+        # ce qui vient de tiers (appels, coordonnées) est encadré, ou absent
+        for titre, vide in (("## Appels", "Aucun appel noté."), ("## Coordonnées", "Absentes.")):
+            suite = t.split(titre + "\n", 1)[1]
+            self.assertTrue(suite.startswith(("[Début du texte écrit par un tiers", vide)), titre)
         self.assertIn("Offre suivante : Séance privée", t)
         with self.assertRaises(KeyError):
             cb.ecrire_dossier(self.v, s, "personne")
