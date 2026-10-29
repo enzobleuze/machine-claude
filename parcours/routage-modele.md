@@ -22,4 +22,15 @@ Je ne me souviens pas des commandes, c'est normal. Claude lit cette table : inte
 | « audit du wiki » | `/lint` (skill `lint-wiki`) |
 | « j'hésite », « aide-moi à décider » | skill `comite-decision` |
 | « valide ce texte », « avant de publier » | skill `board-textes` |
+| « approfondis mon client idéal », « qu'est-ce que mes clients ressentent vraiment ? », « mon contenu ne touche personne » | skill `dossier-client-ideal` |
+| « NotebookLM se déconnecte », « répare la connexion NotebookLM » | skill `notebooklm-brancher` (connexion durable et maintien) |
+| « branche Linear », « explique-moi Linear », « comment marchent mes tâches ? » | skill `taches-source-unique` (clé personnelle, visite guidée) |
+| « mes couleurs », « ma charte », « je n'ai pas de logo ni de couleurs », « change mes couleurs partout » | skill `charte-graphique` |
+| « ouvre le cockpit », « mode démo du cockpit », « branche mon agenda au cockpit », « branche Linear au cockpit », « relève mes réseaux », « dossier complet de X » | skill `cockpit-app` |
+| « coupe les silences », « habille ma vidéo », « revois le montage » | skill `montage-video-code` |
+| « fais un Reel avec cette vidéo », « gabarit rythme », « gabarit éditorial » | skill `reels-et-shorts` |
+| « shorts <vidéo> OK » | skill `decoupe-shorts` |
+| « ma caméra filme flou », « la vidéo saccade » | skill `tournage` |
+| « la musique couvre ma voix », « trouve un son » | skill `sons-et-musique` |
+| « fais un carrousel », « une pub statique », « revue des carrousels », « carrousel du jour », « oui 1, 4 » (après la revue) | skill `carrousel-html` (images IA : `carrousel-image-ia`) |
 <!-- hors-routage: bibliothecaire (mode toujours actif, pas une brique) -->

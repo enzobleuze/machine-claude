@@ -12,10 +12,12 @@ Ce bloc transforme les vraies questions des clients en contenu publié partout, 
 
 **Règle du bloc, sans exception** : chaque pièce de contenu (post, carrousel, script, accroche, légende, titre, article, email) passe par le board des textes (`board-textes`, bloc C) avant toute publication, tout envoi ou tout crédit d'image. Une pièce sans verdict vert reste en brouillon avec la mention « board non passé ».
 
+**Avant d'écrire, toujours** : chaque skill du bloc lit le dossier du client idéal (`wiki/business/client-ideal.md`, `precision-emotionnelle.md` et le fichier de `pensees-client/` de la situation visée). Une accroche, une vidéo courte ou un email s'ouvre sur un niveau 3 ; un texte long en contient au moins deux.
+
 ## Avant de commencer
 - Bloc A fait (vault, ingestion, recherche par le sens) : la banque d'idées se nourrit des appels et des messages.
 - Bloc C fait (`board-textes`, `agent-client-ideal`, carnets experts, `controle-voix`, `controle-verite`).
-- Bloc D fait au moins pour la voix, le client idéal, l'offre et la ressource gratuite.
+- Bloc D fait au moins pour la voix, le dossier du client idéal (`dossier-client-ideal`), l'offre et la ressource gratuite.
 - Outils de base : Python 3, ffmpeg (Windows : `winget install ffmpeg` ; Mac : `brew install ffmpeg` ; Linux : `sudo apt install ffmpeg`), Chrome ou Edge. Vérifie avec `ffmpeg -version` et `python --version`.
 
 ## Ordre conseillé
@@ -48,9 +50,23 @@ Chemin court si l'utilisateur n'a que peu de temps : 1, 3, 4, 5, 6, 17, 19. La v
 | Outil | Rôle | Test |
 |---|---|---|
 | `outils/planche.py` | planche contact d'images ou d'une vidéo (ffmpeg) : juger 16 images pour le prix d'une | `python outils/planche.py --test` |
-| `.claude/skills/carrousel-html/outils/carrousel.py` | carrousel JSON vers PNG 1080x1350 par navigateur sans fenêtre | `--test` |
+| `.claude/skills/carrousel-html/outils/carrousel.py` | carrousel JSON vers PNG aux couleurs de la charte, 5 styles (podcast, uni, éditorial, Reel, vidéo longue découpée), conversation et pub statique, contrôles de débordement, de zone sûre et de contraste ; `rendre`, `exemple`, `images`, `reel`, `split` | `--test` |
+| `.claude/skills/carrousel-html/outils/file.py` | page de revue de la semaine, file du jour, rotation des styles, limites par réseau ; `revue`, `ajouter`, `retirer`, `etat`, `du-jour` | `--test` |
+| `.claude/skills/carrousel-html/outils/tiktok-photo.py` | option : publication en mode photo TikTok par le navigateur ; `--setup`, `--dry-run`, `--contenu-ia` | `--test` |
+| `.claude/skills/carrousel-image-ia/outils/carrousel-ia.py` | règles du carrousel en images IA, prompts tirés de la charte, banque d'images, finition ; `exemple`, `verifier`, `prompts`, `finir`, `banque` | `--test` |
 | `.claude/skills/essais-multiples/outils/essais.py` | registre des essais, lectures à 24 h et 72 h, verdict, seuil de republication | `--test` |
-| `.claude/skills/decoupe-shorts/outils/decoupe.py` | moments d'une vidéo longue vers Shorts 1080x1920 (ffmpeg) | `--test` |
+| `.claude/skills/decoupe-shorts/outils/decoupe.py` | moments d'une vidéo longue vers Shorts 1080x1920 (ffmpeg), mode buste, liaison refusée | `--test` |
+| `.claude/skills/montage-video-code/outils/commun.py` | base commune : ffmpeg, encodeur (carte graphique ou processeur), verrou de rendu, lecture de la charte | `--test` |
+| `.claude/skills/montage-video-code/outils/transcrire.py` | prise vers mots horodatés ; `prise.mp4 t.json` | `--test` |
+| `.claude/skills/montage-video-code/outils/couper.py` | coupe silences, « euh », reprises et bruits de bouche ; `prise.mp4 t.json --apercu`, `--depuis` | `--test` |
+| `.claude/skills/montage-video-code/outils/habiller.py` | sous-titres, cartes, chapitres, zooms et logo aux couleurs de la charte ; `verifier`, `rendre`, `chapitres` | `--test` |
+| `.claude/skills/montage-video-code/outils/rythme.py` | contrôle du rythme ; `video --profil reel` ou `long` | `--test` |
+| `.claude/skills/montage-video-code/outils/revue.py` | page de revue : notes par minutage, une vidéo à la fois ; `dossier [--reseau]` | `--test` |
+| `.claude/skills/montage-video-code/outils/broll.py` | images d'illustration (Pexels) avec registre des licences ; `"requête"` | `--test` |
+| `.claude/skills/sons-et-musique/outils/sonotheque.py` | sonothèque et licences ; `ajouter`, `choisir`, `verifier` | `--test` |
+| `.claude/skills/sons-et-musique/outils/mixage.py` | couche son, musique sous la voix, niveau ; `video -o s --musique auto`, `mesurer` | `--test` |
+| `.claude/skills/tournage/outils/verif.py` | garde du tournage (définition, images par seconde, caméra) ; `prise --attendu 3840x2160`, `cameras` | `--test` |
+| `.claude/skills/reels-et-shorts/outils/gabarit.py` | Reel aux gabarits rythme, éditorial ou simple ; `coupe t.json --gabarit rythme` | `--test` |
 | `.claude/skills/tournage/outils/ecran.py` | script vers écran de lecture plein écran | `--test` |
 
 Installe chaque outil en le copiant dans `outils/` du vault de l'utilisateur, puis lance son `--test` : il doit écrire « AUTO-TEST OK ».

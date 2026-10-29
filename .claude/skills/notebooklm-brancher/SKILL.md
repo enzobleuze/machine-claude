@@ -1,6 +1,6 @@
 ---
 name: notebooklm-brancher
-description: "Branche NotebookLM à Claude Code par la commande notebooklm (paquet notebooklm-py) : installation, connexion, test, une question propre à un carnet avec garde-fou. Utiliser quand l'utilisateur dit « branche NotebookLM », « Claude peut interroger mes carnets ? », « NotebookLM ne répond plus ». Pas pour choisir ou remplir les carnets (utiliser carnets-experts)."
+description: "Branche NotebookLM à Claude Code par la commande notebooklm (paquet notebooklm-py) : installation, connexion, test, une question propre à un carnet avec garde-fou. Utiliser quand l'utilisateur dit « branche NotebookLM », « Claude peut interroger mes carnets ? », « NotebookLM ne répond plus », « NotebookLM se déconnecte tout le temps », « répare la connexion NotebookLM ». Pas pour choisir ou remplir les carnets (utiliser carnets-experts)."
 ---
 # Brancher NotebookLM à Claude
 
@@ -31,7 +31,9 @@ Range tout dans `memory/reference_notebooklm.md` (adresse, offre, date du branch
    - Mac/Linux : `python3 -m pip install --upgrade "notebooklm-py[browser]"` (ou `uv tool install "notebooklm-py[browser]"`).
    - Vérifier : `notebooklm --version`. Si la commande est introuvable, ajouter le dossier `Scripts` (Windows) ou `~/.local/bin` (Mac/Linux) au PATH.
    - Si la connexion réclame un navigateur manquant : `python -m playwright install chromium`.
-2. **Se connecter** (l'utilisateur le fait, Claude guide). Claude ouvre un terminal et lance `notebooklm login`. Dis à l'utilisateur : « Une fenêtre de navigateur s'ouvre. Connecte-toi à ton compte Google comme d'habitude, jusqu'à voir la page d'accueil de NotebookLM. Puis reviens dans le terminal et fais ce qu'il demande (souvent : appuyer sur Entrée). » Claude ne voit et ne tape jamais le mot de passe.
+2. **Se connecter** (l'utilisateur le fait, Claude guide). Claude ne voit et ne tape jamais le mot de passe. Deux façons ; sous Windows, prends directement la durable.
+   - **Durable (celle qui a tenu des semaines).** La connexion vient d'un navigateur du quotidien hors famille Chrome (Firefox), puis l'outil importe ses cookies. Sous Windows, Claude copie `outils/reparer-connexion.ps1` et `outils/garder-connexion.pyw` dans `scripts/notebooklm/` du vault. Il explique en deux phrases ce que fait le script : installer Firefox s'il manque, exclure de l'antivirus le seul dossier du lecteur de cookies, créer une tâche qui rafraîchit la connexion toutes les 20 minutes. Il demande l'accord, puis donne la marche : « Clic droit sur le bouton Démarrer, Terminal (administrateur), colle cette ligne : `powershell -ExecutionPolicy Bypass -File "<chemin du vault>\scripts\notebooklm\reparer-connexion.ps1" -Email <adresse Google>` ». Le script s'arrête une fois pour que l'utilisateur se connecte à NotebookLM dans Firefox. Il doit tourner hors de l'application Claude (voir Pièges). Mac : `python3 -m pip install --upgrade "notebooklm-py[cookies]"`, connexion dans Firefox, puis `notebooklm login --browser-cookies firefox --account <adresse>`.
+   - **Rapide, pour essayer.** Claude lance `notebooklm login`. Dis à l'utilisateur : « Une fenêtre de navigateur s'ouvre. Connecte-toi à ton compte Google comme d'habitude, jusqu'à voir la page d'accueil de NotebookLM. Puis reviens dans le terminal et fais ce qu'il demande (souvent : appuyer sur Entrée). » Cette connexion a été coupée par Google au bout d'une heure environ, plusieurs fois : passe à la durable dès que ça arrive.
 3. **Tester la connexion** (Claude) : `notebooklm auth check --test --json` doit dire `"status": "ok"`. Puis `notebooklm list` : la liste des carnets s'affiche avec leurs identifiants.
 4. **Poser le garde-fou** (Claude). Copie `outils/nlm_ask.py` dans `scripts/nlm_ask.py` du vault, puis `python scripts/nlm_ask.py selftest` doit imprimer `selftest OK`. À partir de là, toute question passe par :
    ```
@@ -43,13 +45,13 @@ Range tout dans `memory/reference_notebooklm.md` (adresse, offre, date du branch
    - Question dans un fichier, moins de 3 800 signes, première ligne : « Réponds UNIQUEMENT depuis les sources de ce carnet et cite la source de chaque point ; si tes sources ne disent rien sur un point, écris AUCUNE SOURCE. »
    - Une réponse refusée par le garde-fou ne sert jamais.
    - La réponse est de la matière première : on la reformule dans la voix de l'utilisateur, on ne la colle pas.
-6. **Maintien de connexion** (facultatif, si l'ordinateur reste allumé). Les cookies de session expirent vite. Une tâche qui lance `notebooklm auth refresh --quiet` toutes les 20 minutes aide.
-   - Windows : `schtasks /Create /SC MINUTE /MO 20 /TN "NotebookLM refresh" /TR "cmd /c notebooklm auth refresh --quiet"`
-   - Mac/Linux : `crontab -e` puis `*/20 * * * * notebooklm auth refresh --quiet`
-   Demande l'accord avant de créer la tâche (c'est une configuration permanente).
+6. **Maintien de connexion** (indispensable dès que Claude interroge les carnets chaque semaine). Les cookies de session expirent vite : sans maintien, la connexion est retombée à chaque fois.
+   - Windows : déjà posé par `reparer-connexion.ps1`. La tâche « NotebookLM garder connexion » lance `garder-connexion.pyw` toutes les 20 minutes, sans fenêtre. Il rafraîchit la session, relit la connexion de Firefox si besoin, et après trois échecs de suite écrit `~/.notebooklm/ALERTE-connexion.txt` avec la marche à suivre. Un succès efface l'alerte.
+   - Mac/Linux : copie `garder-connexion.pyw` dans `~/.notebooklm/`, puis `crontab -e` et `*/20 * * * * python3 ~/.notebooklm/garder-connexion.pyw`.
+   Demande l'accord avant de créer la tâche (c'est une configuration permanente). Contrôle : `python ~/.notebooklm/garder-connexion.pyw --une-fois` affiche `CONNEXION OK`.
 
 ## Test
-`python scripts/nlm_ask.py auth` sort 0, puis une vraie question sur un carnet de l'utilisateur sort 0 avec un fichier `.answer.md` qui cite au moins une source. Les deux, sinon ce n'est pas branché.
+`python scripts/nlm_ask.py auth` sort 0, puis une vraie question sur un carnet de l'utilisateur sort 0 avec un fichier `.answer.md` qui cite au moins une source. Les deux, sinon ce n'est pas branché. Avec la tâche de maintien : `garder-connexion.pyw --test` imprime `AUTO-TEST OK`, et le lendemain `nlm_ask.py auth` sort encore 0 sans que l'utilisateur ait rien fait.
 
 ## Pièges vécus
 - **`notebooklm use` ne suffit pas.** `ask` continue la DERNIÈRE conversation ouverte, parfois sur un autre carnet. Symptôme vécu : on interroge l'expert vente et la réponse sort du carnet relationnel. Remède : carnet explicite (`-n`) et conversation neuve (`--new`) à chaque question.
@@ -58,15 +60,19 @@ Range tout dans `memory/reference_notebooklm.md` (adresse, offre, date du branch
 - **« The sources do not contain... »** veut souvent dire que la question était trop large, même sur le bon carnet. Resserrer la question et relancer une fois.
 - **Sans la phrase d'amorce**, un carnet est revenu sans aucune source citée. Le garde-fou refuse alors la réponse : c'est voulu.
 - **Accents cassés sous Windows** : le script force `PYTHONUTF8=1`. À la main, le mettre aussi.
-- **Connexion qui meurt au bout d'une heure environ.** Google a révoqué à plusieurs reprises les sessions créées par le navigateur de l'outil. Ce qui a tenu : se connecter dans un vrai navigateur du quotidien, puis importer ses cookies (`notebooklm login --browser-cookies firefox`, ou le nom de son navigateur ; vérifier avec `notebooklm login --help`), avec la tâche de maintien. Le navigateur a mieux tenu quand il n'était pas de la famille Chrome. Et l'utilisateur ne se déconnecte jamais de Google dans ce navigateur. Un antivirus a supprimé le lecteur de cookies à l'installation : si l'import dit « not installed », regarder la quarantaine de l'antivirus.
+- **Connexion qui meurt au bout d'une heure environ.** Google a révoqué à plusieurs reprises les sessions créées par le navigateur de l'outil. Ce qui a tenu : se connecter dans un vrai navigateur du quotidien, puis importer ses cookies (`notebooklm login --browser-cookies firefox`, ou le nom de son navigateur ; vérifier avec `notebooklm login --help`), avec la tâche de maintien. Le navigateur a mieux tenu quand il n'était pas de la famille Chrome. Et l'utilisateur ne se déconnecte jamais de Google dans ce navigateur. Tout cela est dans `reparer-connexion.ps1`.
+- **Le maintien arrêté, la panne revient.** La tâche de maintien a été coupée un temps par prudence : la connexion est retombée dans l'heure après chaque reconnexion. On ne la coupe plus.
+- **L'antivirus supprime le lecteur de cookies.** À chaque installation, Windows Defender a mis `rookie_cookies` en quarantaine, et l'import répondait « rookie-cookies is not installed ». Remède : exclure ce seul dossier, puis réinstaller (étapes 2 et 3 du script).
+- **L'application Claude de Windows isole ce qu'elle installe.** Des installations faites par Claude depuis l'application restaient invisibles pour les tâches planifiées. D'où le script lancé par l'utilisateur lui-même, dans un terminal ouvert depuis le bouton Démarrer.
+- **Firefox du Microsoft Store range son profil ailleurs.** Le lecteur de cookies ne le trouvait pas. Le script relie le bon dossier (une jonction) ; mieux encore, installer Firefox par `winget --source winget`, comme le fait le script.
 - **Ne crée pas de compte Google « jetable » pour l'outil.** Un compte neuf dédié au robot a été suspendu par Google pour activité automatisée. On reste sur le vrai compte, à un rythme humain : une question à la fois, une pause entre deux.
 - **Changement d'adresse côté Google.** Un jour tout a cassé (« CSRF token not found »). Remède : mettre l'outil à jour (étape 1), renommer le dossier du profil navigateur de l'outil (`notebooklm doctor` donne son chemin), se reconnecter.
 - **Le plafond de questions par jour dépend de l'offre.** Ne bride pas par prudence : on s'arrête sur un vrai refus de NotebookLM, jamais avant.
 
 ## Entretien dans le temps
-- Chaque début de séance qui va interroger les carnets : `python scripts/nlm_ask.py auth`. Sortie 2 : l'utilisateur relance `notebooklm login`, rien d'autre ne dépend de lui.
+- Chaque début de séance qui va interroger les carnets : si `~/.notebooklm/ALERTE-connexion.txt` existe, le dire en une ligne avec sa marche à suivre ; puis `python scripts/nlm_ask.py auth`. Sortie 2 : l'utilisateur vérifie sa session Google dans Firefox et relance `reparer-connexion.ps1`, rien d'autre ne dépend de lui.
 - Une fois par mois : `python -m pip install --upgrade "notebooklm-py[browser]"`, puis le selftest et une question test.
 - Toute panne nouvelle et son remède vont dans `memory/reference_notebooklm.md`.
 
 ## Après
-Mets à jour `wiki/maps/parcours.md` (brique faite, date), ajoute une entrée à `log.md`, complète la note mémoire. Propose ensuite `carnets-experts`.
+Mets à jour `wiki/maps/parcours.md` (brique faite, date), ajoute une entrée à `log.md`, complète la note mémoire. Propose ensuite `carnets-experts`. Si les tâches ne sont pas encore branchées, propose aussi `taches-source-unique` avec Linear : la clé personnelle qui n'expire pas et la visite guidée y sont.

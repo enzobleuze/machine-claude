@@ -34,6 +34,8 @@ Les briques 4 et 5 ne dépendent pas de NotebookLM : si la connexion Google bloq
 | Outil | Rôle | Commandes |
 |:-|:-|:-|
 | `notebooklm-brancher/outils/nlm_ask.py` | une question à un carnet, conversation neuve, taille limitée, garde-fou auteur et sources | `auth`, `ask <carnet> <question.txt>`, `selftest` |
+| `notebooklm-brancher/outils/garder-connexion.pyw` | maintien de la connexion toutes les 20 minutes, repli sur les cookies de Firefox, alerte après 3 échecs | `--une-fois`, `--navigateur <nom>`, `--test` |
+| `notebooklm-brancher/outils/reparer-connexion.ps1` | connexion durable sous Windows (Firefox, antivirus, import, tâche de maintien), lancé par l'utilisateur en administrateur | `-Email <adresse>` |
 | `carnets-experts/outils/carnets.modele.json` | gabarit du registre des carnets | |
 | `comite-roast-ancre/outils/roast.py` | sièges en `claude -p` sans outils, en parallèle ; notes pondérées et bandes | `tour <dossier> <n>`, `scores <dossier>`, `selftest` |
 | `comite-roast-ancre/outils/siege-systeme.md` | prompt système d'un siège | |

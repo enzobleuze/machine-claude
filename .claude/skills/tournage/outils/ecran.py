@@ -1,7 +1,8 @@
 """ecran.py : un script texte ou Markdown devient une page de lecture plein écran pour le tournage.
 
-Fond sombre, texte blanc en grand, lignes courtes. Les lignes entre crochets [comme ceci] sont des notes
-(affichées en bleu, plus petites) : repères de slide, gestes, rappels. Aucune bibliothèque à installer.
+Fond sombre, texte clair en grand, lignes courtes, aux couleurs du thème sombre de la charte (charte simple sinon).
+Les lignes entre crochets [comme ceci] sont des notes (couleur secondaire, plus petites) : repères de diapo, gestes,
+rappels. Aucune bibliothèque à installer.
 
   python ecran.py script.md [-o ecran.html] [--taille 46]
   python ecran.py --test
@@ -10,11 +11,16 @@ Dans le navigateur : F11 pour le plein écran, Espace ou flèche bas pour avance
 + et - pour la taille du texte. Place la fenêtre juste sous l'objectif de la caméra pour garder le regard.
 """
 import argparse, html, os, re, sys, tempfile
+from pathlib import Path
+
+ICI = Path(__file__).resolve().parent
+sys.path[:0] = [str(ICI), str(ICI.parents[1] / "montage-video-code" / "outils")]
+import commun as C  # noqa: E402
 
 PAGE = """<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Écran de tournage</title><style>
-html,body{{margin:0;background:#0d0d0d;color:#fff}}
-main{{max-width:28em;margin:0 auto;padding:30vh 1.5em 70vh;font:{taille}px/1.45 Arial,sans-serif}}
-p{{margin:0 0 1.1em}} .note{{color:#6fa8ff;font-size:.62em}} h2{{color:#e8c46a;font-size:.8em;margin:2em 0 .6em}}
+html,body{{margin:0;background:{fond};color:{texte}}}
+main{{max-width:28em;margin:0 auto;padding:30vh 1.5em 70vh;font:{taille}px/1.45 {police}}}
+p{{margin:0 0 1.1em}} .note{{color:{note};font-size:.62em}} h2{{color:{titre};font-size:.8em;margin:2em 0 .6em}}
 </style></head><body><main>
 {corps}
 </main><script>
@@ -50,7 +56,10 @@ def ecrire(source, sortie=None, taille=46):
         raise SystemExit("Script vide.")
     sortie = sortie or os.path.splitext(source)[0] + "-ecran.html"
     with open(sortie, "w", encoding="utf-8") as f:
-        f.write(PAGE.format(taille=taille, corps=corps))
+        j = C.charte()
+        s = j["sombre"]
+        f.write(PAGE.format(taille=taille, corps=corps, fond=s["fond"], texte=s["texte"], note=s["accent_2"], titre=s["accent"],
+                            police=f"'{j['polices']['texte']}',Arial,sans-serif"))
     print(f"Écran écrit : {sortie}")
     return sortie
 

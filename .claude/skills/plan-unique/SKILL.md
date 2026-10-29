@@ -31,7 +31,7 @@ Range tout dans `wiki/strategie/plan.md`.
 2. **Remplir le modèle (Claude, 20 min).** Copie `outils/plan.modele.md` vers `wiki/strategie/plan.md`. Remplace chaque `{{…}}` par les réponses. Un chiffre inconnu s'écrit `null`, jamais 0. Garde les dates au format `AAAA-MM-JJ` dans le bloc du haut.
 3. **Feuille de route (ensemble, 20 min).** Écris les étapes avec leur « Preuve de fin » binaire. Sous chaque étape, des cases de tâches de 20 minutes à 2 heures. Marque **PROCHAINE** sur une seule case non cochée. Chaque case dit qui la fait (« toi 15 min », « Claude, sans ton temps »).
 4. **Vérifier la lecture (Claude, 5 min).** Si le Cockpit est installé, lance `python scripts/cockpit/cockpit_build.py ligne`. Sinon lance le contrôle du modèle : `python .claude/skills/cockpit-app/outils/cockpit_build.py ligne --vault .` depuis le vault. La ligne doit citer la prochaine tâche.
-5. **Ligne de situation en début de conversation (Claude, 10 min).** Si `scripts/cockpit/cockpit_build.py` n'existe pas encore, copie-le depuis `.claude/skills/cockpit-app/outils/` (il marche seul, sans le serveur). Ajoute ensuite un hook `SessionStart` dans `.claude/settings.json` qui affiche la ligne :
+5. **Ligne de situation en début de conversation (Claude, 10 min).** Si `scripts/cockpit/cockpit_build.py` n'existe pas encore, copie-le avec `cockpit_sources.py` (il en a besoin) depuis `.claude/skills/cockpit-app/outils/` (ils marchent seuls, sans le serveur). Ajoute ensuite un hook `SessionStart` dans `.claude/settings.json` qui affiche la ligne :
    ```json
    {"hooks": {"SessionStart": [{"hooks": [{"type": "command", "command": "python -X utf8 scripts/cockpit/cockpit_build.py ligne"}]}]}}
    ```

@@ -66,4 +66,4 @@ Les 18 cases de `_entretien.md` sont cochées ou marquées « à vérifier », e
 - Tous les trois mois, propose une séance de 20 minutes « qu'est-ce qui a changé ? » sur les questions 5, 10 et 17.
 
 ## Après
-Mets à jour `wiki/maps/parcours.md` (brique entretien-fondateur faite), ajoute une ligne dans `log.md`, enregistre en mémoire le temps disponible par semaine (il sert à la règle des 4 %). Propose ensuite `voix-personnelle`.
+Mets à jour `wiki/maps/parcours.md` (brique entretien-fondateur faite), ajoute une ligne dans `log.md`, enregistre en mémoire le temps disponible par semaine (il sert à la règle des 4 %). Propose ensuite `dossier-client-ideal` (le client idéal mot à mot, matière de tout contenu), puis `voix-personnelle`.

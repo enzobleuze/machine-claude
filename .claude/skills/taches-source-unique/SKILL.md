@@ -33,7 +33,11 @@ Range : le choix et les étiquettes dans `wiki/maps/taches-workflow.md`, la règ
    « Tâches = <outil choisi>. Connaissance = le wiki. Préférences et façons de travailler = la mémoire. Rien en double. Jamais une tâche dans la mémoire ou le journal. »
 
 2. **Brancher l'outil (15 min).**
-   - Linear : la personne crée un compte et un espace (Claude la guide écran par écran). Puis Claude ajoute le connecteur : `claude mcp add --transport http linear https://mcp.linear.app/mcp` (vérifie l'adresse sur la page officielle « MCP » de Linear), puis `/mcp` pour lancer la connexion ; la personne clique « autoriser » dans son navigateur. Claude crée les étiquettes de l'interview.
+   - Linear : la personne crée un compte et un espace (Claude la guide écran par écran). Puis le branchement par clé personnelle, qui n'expire pas :
+     1. Dans Linear, la personne ouvre les réglages de son compte, rubrique « Security & access », partie « Personal API keys », crée une clé nommée « Claude » et la copie. Si l'écran a changé, Claude cherche le chemin sur la page d'aide de Linear (« personal API key »).
+     2. Elle ouvre un terminal (jamais la conversation) et colle la ligne que Claude lui prépare, `<clé>` remplacé par sa clé : `claude mcp add --transport http --scope user linear https://mcp.linear.app/mcp --header "Authorization: Bearer <clé>"`. La clé ne passe jamais dans la conversation.
+     3. Elle redémarre Claude. Claude vérifie qu'il voit l'espace (il liste les équipes), puis crée les étiquettes de l'interview.
+     Plan B, si la clé coince : `claude mcp add --transport http --scope user linear https://mcp.linear.app/mcp`, puis `/mcp` ; la personne clique « autoriser » dans son navigateur. Vérifie l'adresse sur la page officielle « MCP » de Linear.
    - Autre outil : même geste avec son connecteur (voir connecteurs-mcp).
    - Fichier : Claude crée `wiki/maps/taches.md` avec quatre sections « En cours », « À faire », « Plus tard », « Fait (30 derniers jours) » et 3 [[liens]].
    Test du branchement : Claude crée une tâche d'essai, la lit, puis l'annule.
@@ -53,13 +57,16 @@ Range : le choix et les étiquettes dans `wiki/maps/taches-workflow.md`, la règ
 
 7. **La revue mensuelle (5 min).** Claude ajoute à `wiki/maps/taches-workflow.md` : « Le 1er du mois : Claude propose 10 idées du parking à promouvoir en tâches (avec le gabarit) ou à tuer (section "Tuées", avec la date). La personne décide. » Si l'outil a une limite de tâches actives, la revue sert aussi de filtre : une tâche qui n'est pas faisable dans les 3 mois retourne au parking.
 
-8. **Le routage (2 min).** Les phrases de la personne vont dans `wiki/maps/routage.md` (« note ça », « priorités », « qu'est-ce qui reste »).
+8. **Le routage (2 min).** Les phrases de la personne vont dans `wiki/maps/routage.md` (« note ça », « priorités », « qu'est-ce qui reste », « explique-moi Linear »).
+
+9. **La visite guidée (10 min).** Claude explique l'outil à la personne avec `outils/expliquer-linear.md` (pour un autre outil ou le fichier, même plan avec ses mots à lui) : à quoi il sert en deux phrases, les mots anglais de l'écran, les phrases à dire, ce que Claude fait seul, puis l'exercice sur le téléphone. Une idée, puis une pratique : jamais le texte d'un bloc. Claude copie ensuite le tableau « Ce que tu me dis » dans `wiki/maps/taches-workflow.md` pour le redonner à la demande.
 
 ## Test
 Les trois sont vrais :
 - Dans la conversation, la personne dit « il faudra refaire ma page d'accueil un jour ». Claude crée une tâche (ou une ligne de parking) sans qu'on le lui demande, avec une définition de fini, et montre où elle est.
 - La personne dit « on en est où ? » : Claude liste 5 tâches réelles avant de répondre.
 - La tâche d'essai de l'étape 2 a été créée puis annulée.
+- Après la visite guidée, la personne dit avec ses mots à quoi lui sert l'outil, et retrouve sur son téléphone une tâche créée par Claude.
 
 ## Pièges vécus
 - **Cinq listes, zéro vérité.** Tant que les tâches vivaient partout, personne ne savait l'état. Une seule source, et la règle de partage écrite dans le cœur.
@@ -67,6 +74,7 @@ Les trois sont vrais :
 - **La liste qui déborde.** Avec des centaines de tâches, la liste ne veut plus rien dire. Le parking prend tout ce qui n'est pas faisable dans l'année.
 - **La boîte « à trier » qui grossit.** Le parking marche seulement si Claude le range à chaque fin de session.
 - **Le perso mêlé au travail.** Les rappels du téléphone noyaient les tâches de travail. Deux outils, deux usages.
+- **Le connecteur branché par le navigateur a dû être reconnecté.** Quand l'autorisation tombe, Claude ne voit plus aucune tâche et la reprise se fait à l'aveugle. La clé personnelle n'expire pas : elle est devenue le branchement par défaut. Elle se garde comme un mot de passe, car elle donne accès à tout l'espace.
 - **Une migration d'outil coûte cher.** Changer d'outil de tâches oblige à réécrire la reprise, la passation et les apps. Choisis une fois, et ne change que si une limite bloque vraiment.
 
 ## Entretien dans le temps

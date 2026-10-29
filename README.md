@@ -12,6 +12,8 @@ Cette recette vient d'un système réel construit et rodé pendant des mois par 
 
 Ensuite, chaque fois que tu veux avancer, écris simplement : **« On continue le parcours. »**
 
+Pour créer du contenu qui touche exactement ton client idéal, suis **GUIDE-CONTENU.md** : le chemin pas à pas, du premier entretien jusqu'au contenu publié et mesuré.
+
 ## Ce dont tu as besoin
 
 - Un abonnement Claude (Pro ou Max) et Claude Code installé (claude.ai/download).

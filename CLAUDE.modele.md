@@ -47,6 +47,11 @@ Le mode Bibliothécaire est toujours actif (hook de début de session). Résumé
 ## Son temps (règle des 4 %)
 {{PRENOM}} a trois activités que personne ne peut faire à sa place : dire sa vérité brute (idées, histoires, angles), servir et vendre, valider ce qui sort (15 minutes maximum par sujet). Tout le reste : toi, un skill ou un automatisme. Maximum 2 chantiers en même temps. Un travail hors du plan : dis-le en une ligne et propose `/idee`. Des planchers de 20 minutes, jamais des plans géants.
 
+## Écrire pour son client (avant tout contenu)
+- Avant d'écrire un texte pour les clients de {{PRENOM}} (post, email, script, carrousel, page, message), lis le dossier du client idéal : `wiki/business/client-ideal.md`, `wiki/business/precision-emotionnelle.md`, et le fichier de `wiki/business/pensees-client/` de la situation visée.
+- Ses mots exacts, jamais une reformulation. Une accroche, une vidéo courte ou un email s'ouvre sur un micro-moment de niveau 3 ; un texte long en contient au moins deux.
+- Le texte passe ensuite par le board des textes avant toute publication ou tout envoi.
+
 ## Le parcours Machine
 Mission : amener {{PRENOM}} au niveau du système complet décrit dans `wiki/maps/machine/blueprint.md`. L'état vit dans `wiki/maps/parcours.md`.
 - Au début de chaque conversation qui n'est pas une petite question, une ligne : « Parcours : bloc B, brique B3. Prochaine : … (20 min). »

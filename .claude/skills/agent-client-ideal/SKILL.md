@@ -10,6 +10,7 @@ Les mots exacts des clients battent tout ce que Claude imagine. Dans le système
 ## Prérequis
 - La fiche du client idéal (entretien fondateur, bloc D) et des paroles réelles de clients : messages, emails, questionnaires, transcriptions d'appels (bloc A, ingestion).
 - `controle-verite` (pour pseudonymiser). Fais-le avant si besoin.
+- Conseillé : `dossier-client-ideal` (bloc D). Ses situations deviennent les personas, et ses pensées secrètes, fausses croyances et objections remplissent les crochets de l'agent.
 - Facultatif : un carnet `voix-client` (skill `carnets-experts`) pour retrouver des phrases exactes par thème.
 - Coût : un sous-agent Sonnet par passage.
 

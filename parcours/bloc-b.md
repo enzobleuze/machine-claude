@@ -52,6 +52,7 @@ Liens avec les autres blocs : B12 prépare le jeton et l'appel que le bloc F env
 | `ameliorer-les-skills/outils/lire-sessions.py` | bilan d'usage et extraits de transcriptions après chaque lancement | `usage`, `extraits <nom>`, `--test` |
 | `routage-intentions/outils/verifier-routage.py` | liens morts et outils absents de la table de routage | `[routage.md]`, `--test` |
 | `taches-source-unique/outils/gabarit-tache.md` | gabarit de tâche avec définition de fini | (texte à copier) |
+| `taches-source-unique/outils/expliquer-linear.md` | visite guidée de Linear pour la personne : mots de l'écran, phrases à dire, exercice sur le téléphone | (texte à adapter) |
 | `claude-sans-fenetre/outils/essai-claude-p.sh` et `.ps1` | essai d'un appel `claude -p` avec le jeton longue durée, coût affiché | `[leger]` |
 | `outils-locaux/outils/modele-local.py` | appel d'un modèle local (Ollama) avec repli code 3 | `"consigne"`, `--dispo`, `--test` |
 | `apps-locales-et-mods/outils/app-locale/` | moteur `construire-etat.py`, `serveur.py` (127.0.0.1), `index.html` | `--test`, `--state <fixture>` |
