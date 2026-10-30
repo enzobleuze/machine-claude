@@ -8,12 +8,15 @@ L'utilisateur télécharge le zip, l'ouvre avec Claude Code et dit « installe �
 ## Les 4 lois du repo
 1. **Interview d'abord, à chaque étape.** Aucune brique ne se construit avec des valeurs inventées. Chaque skill commence par une section « Interview » : les questions à poser à l'utilisateur (une à la fois ou en petit lot, langage simple), ce qu'on lit d'abord dans son vault pour ne pas redemander ce qu'on sait déjà, et où ranger les réponses. Le Claude de l'utilisateur adapte tout à ce qu'il sait de la personne.
 2. **Claude fait le travail.** L'utilisateur ne fait que ce qui demande ses mains, ses accès (connexions, mots de passe, paiements) ou son accord. Tout le reste (écrire les fichiers, scripts, tâches planifiées, tests), Claude le fait.
-3. **Zéro fuite.** Jamais : le nom du coach d'origine, sa marque, ses clients, ses chiffres, ses comptes, ses identifiants (IDs de notebooks, de comptes, de workflows), ses chemins de fichiers, ses secrets, ses auteurs de référence nommés comme « les siens ». On transmet la MÉCANIQUE et les LEÇONS, jamais le contenu. Exemples permis : « un notebook par expert de ton domaine (ex. pour un coach : les auteurs qu'il cite ; pour une boulangère : les livres de technique) ». Marques d'outils publics permises (Claude Code, Obsidian, NotebookLM, GitHub, Telegram, GoHighLevel, Linear, Fathom, etc.) en les présentant comme options.
+3. **Zéro fuite.** Jamais : le nom du coach d'origine, sa marque, ses clients, ses chiffres, ses comptes, ses identifiants (IDs de notebooks, de comptes, de workflows), ses chemins de fichiers, ses secrets, ses auteurs de référence nommés comme « les siens ». On transmet la MÉCANIQUE et les LEÇONS, jamais le contenu. Exemples permis : « un notebook par expert de ton domaine (ex. pour un coach : les auteurs qu'il cite ; pour une boulangère : les livres de technique) ». Marques d'outils publics permises (Claude Code, Obsidian, NotebookLM, GitHub, Telegram, GoHighLevel, Linear, Fathom, etc.) en les présentant comme options. Seule exception : la vitrine publique signée par l'auteur (README.md, LICENSE, CONTRIBUTING.md, .github/, assets/) porte son nom, sa marque et son site ; aucune recette, aucun outil ne les reprend.
 4. **Prouvé, pas théorique.** Chaque brique dit le problème qu'elle a réglé dans le système d'origine, ses pièges vécus et le test binaire qui prouve qu'elle marche.
 
 ## Arborescence
 ```
 README.md                     pour l'humain : ce que c'est, comment démarrer (3 gestes)
+LICENSE, CONTRIBUTING.md      licence MIT et guide de contribution (vitrine publique)
+.github/ISSUE_TEMPLATE/       formulaires « demande » et « problème »
+assets/                       images du README
 INSTALLER.md                  pour Claude : le point d'entrée, l'ordre d'installation
 CLAUDE.modele.md              le cœur à fusionner dans le CLAUDE.md de l'utilisateur
 parcours/blueprint.md         la carte de toutes les briques, par bloc, dans l'ordre
