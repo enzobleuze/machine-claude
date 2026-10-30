@@ -1,0 +1,25 @@
+name: "💡 Idée ou demande de mise à jour"
+description: "Une brique qui manque, une amélioration, une mise à jour que tu aimerais voir."
+title: "[Demande] "
+labels: ["demande"]
+body:
+  - type: markdown
+    attributes:
+      value: "Merci ! Chaque demande m'aide à améliorer la machine pour tout le monde. Enzo"
+  - type: textarea
+    id: besoin
+    attributes:
+      label: "Ce que tu aimerais"
+      description: "Décris la brique, l'amélioration ou la mise à jour, avec tes mots."
+    validations:
+      required: true
+  - type: textarea
+    id: pourquoi
+    attributes:
+      label: "Ce que ça changerait pour toi"
+      description: "Le problème que tu veux régler dans ton business ou ta journée."
+  - type: input
+    id: metier
+    attributes:
+      label: "Ton métier ou ton business (optionnel)"
+      placeholder: "Ex. coach, artisan, consultante, boulangerie..."

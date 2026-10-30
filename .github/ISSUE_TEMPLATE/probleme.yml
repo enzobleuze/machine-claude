@@ -1,0 +1,26 @@
+name: "🐞 Une étape bloque"
+description: "Une installation ou une brique qui ne marche pas comme prévu."
+title: "[Problème] "
+labels: ["probleme"]
+body:
+  - type: input
+    id: brique
+    attributes:
+      label: "La brique ou l'étape concernée"
+      placeholder: "Ex. notebooklm-brancher, étape 3"
+    validations:
+      required: true
+  - type: dropdown
+    id: systeme
+    attributes:
+      label: "Ton ordinateur"
+      options: ["Windows", "Mac", "Linux"]
+    validations:
+      required: true
+  - type: textarea
+    id: quoi
+    attributes:
+      label: "Ce qui s'est passé"
+      description: "Ce que tu as demandé à Claude, ce qu'il a fait, et le message d'erreur s'il y en a un. Retire tes mots de passe, clés et noms de clients avant de coller."
+    validations:
+      required: true
